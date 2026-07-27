@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>熊猫造梦局 | MVP 财务量化沙盘</title>
+    <title>熊猫造梦局 | MVP 财务量化沙盘 V2</title>
     <style>
         :root {
             --primary: #27ae60;
@@ -13,9 +13,10 @@
             --text-main: #2c3e50;
             --text-light: #7f8c8d;
             --border: #e2e8f0;
+            --accent: #e67e22;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft YaHei", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.6;
@@ -54,7 +55,7 @@
             border: 1px solid var(--border);
         }
         h2 {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--primary-dark);
             border-bottom: 2px solid var(--primary);
             padding-bottom: 8px;
@@ -62,17 +63,19 @@
             margin-bottom: 20px;
         }
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
         .input-group label {
             display: block;
             font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 8px;
+            color: var(--text-main);
         }
         .input-group input[type="range"] {
             width: 100%;
             cursor: pointer;
+            accent-color: var(--primary);
         }
         .value-display {
             float: right;
@@ -81,12 +84,17 @@
         }
         .static-data {
             background-color: var(--bg-color);
-            padding: 12px;
+            padding: 12px 15px;
             border-radius: 8px;
             margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-size: 0.9rem;
+        }
+        .static-data strong {
+            color: var(--primary-dark);
+            font-size: 1.05rem;
         }
         .result-box {
             text-align: center;
@@ -95,6 +103,7 @@
             border-radius: 10px;
             margin-bottom: 15px;
             border: 1px solid var(--primary);
+            transition: all 0.3s ease;
         }
         .result-title {
             font-size: 0.9rem;
@@ -102,7 +111,7 @@
             margin-bottom: 5px;
         }
         .result-value {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
             color: var(--primary-dark);
         }
@@ -116,6 +125,10 @@
             color: var(--text-light);
             margin-top: 20px;
             text-align: justify;
+            padding: 10px;
+            background: #fff8e1;
+            border-radius: 6px;
+            border-left: 3px solid #f1c40f;
         }
     </style>
 </head>
@@ -123,18 +136,18 @@
 
 <div class="container">
     <div class="header">
-        <h1>熊猫造梦局 | MVP 联营财务沙盘</h1>
-        <p>纯本地运算模型 | 根据实际客流与阶梯扣点动态推演盈利指标</p>
+        <h1>熊猫造梦局 | MVP 联营财务沙盘 V2</h1>
+        <p>动态连带率测算模型 | 基础体验包与增项包独立核算</p>
     </div>
 
     <div class="grid">
         <!-- 变量输入面板 -->
         <div class="card">
-            <h2>📊 运营动因 (调节滑块)</h2>
+            <h2>📊 运营动因 (流量与转化)</h2>
             
             <div class="input-group">
-                <label>单日自然路过客流 (人/天) <span class="value-display" id="val-traffic">5000</span></label>
-                <input type="range" id="traffic" min="1000" max="15000" step="500" value="5000">
+                <label>单日自然路过客流 (人/天) <span class="value-display" id="val-traffic">4000</span></label>
+                <input type="range" id="traffic" min="1000" max="15000" step="500" value="4000">
             </div>
             
             <div class="input-group">
@@ -147,74 +160,91 @@
                 <input type="range" id="conversion" min="1" max="15" step="0.5" value="5">
             </div>
 
+            <h2 style="margin-top: 30px;">👗 销售动因 (连带率与扣点)</h2>
+
+            <div class="input-group">
+                <label>服饰配饰连带率 (%) <span class="value-display" id="val-addon-rate" style="color: var(--accent);">50</span></label>
+                <input type="range" id="addon-rate" min="0" max="100" step="5" value="50">
+            </div>
+
             <div class="input-group">
                 <label>阳光百货基础扣点 (%) <span class="value-display" id="val-commission">18</span></label>
                 <input type="range" id="commission" min="5" max="30" step="1" value="18">
-            </div>
-
-            <h2 style="margin-top: 30px;">🔒 固定资产与产品BOM锁定参数</h2>
-            <div class="static-data">
-                <span>MVP总硬成本 (单口机+100套库存)</span>
-                <strong>¥ 14,527</strong>
-            </div>
-            <div class="static-data">
-                <span>单客综合BOM进价成本</span>
-                <strong>¥ 70.0</strong>
-            </div>
-            <div class="static-data">
-                <span>单客综合客单价预估 (ATV)</span>
-                <strong>¥ 189.6</strong>
             </div>
         </div>
 
         <!-- 财务输出面板 -->
         <div class="card">
-            <h2>📈 核心财务指标 (月度测算)</h2>
+            <h2>💰 动态财务指标核算</h2>
+
+            <div class="static-data" style="border: 1px solid var(--border);">
+                <div>
+                    <span>单客综合客单价预估 (ATV)</span><br>
+                    <span style="font-size:0.75rem; color:#7f8c8d;">基础包 ¥129.7 + 服饰增项</span>
+                </div>
+                <strong id="display-atv">¥ 129.7</strong>
+            </div>
             
-            <div class="result-box">
+            <div class="static-data" style="border: 1px solid var(--border);">
+                <div>
+                    <span>单客综合BOM进价</span><br>
+                    <span style="font-size:0.75rem; color:#7f8c8d;">基础耗材 ¥49.2 + 连带服饰</span>
+                </div>
+                <strong id="display-bom">¥ 49.2</strong>
+            </div>
+
+            <div class="result-box" style="margin-top: 20px;">
                 <div class="result-title">阳光百货联营收益 (月)</div>
                 <div class="result-value" id="mall-revenue">¥ 0</div>
-                <div class="result-sub" id="commission-note">按基础扣点计算</div>
+                <div class="result-sub" id="commission-note">按基础设定的扣点率计算</div>
             </div>
 
-            <div class="result-box" style="border-color: #bdc3c7;">
+            <div class="result-box" style="border-color: #bdc3c7; background: #f8f9fa;">
                 <div class="result-title">卖方(联营方)账面毛利 (月)</div>
                 <div class="result-value" style="color: #2c3e50;" id="partner-profit">¥ 0</div>
-                <div class="result-sub">未扣除人工薪资及日常损耗</div>
+                <div class="result-sub">总流水 - BOM进货成本 - 商场抽成</div>
             </div>
 
-            <div class="result-box" style="border-color: #e67e22; background: linear-gradient(135deg, #fdfbf7 0%, #fdf5e6 100%);">
+            <div class="result-box" style="border-color: var(--accent); background: linear-gradient(135deg, #fdfbf7 0%, #fdf5e6 100%);">
                 <div class="result-title">MVP 硬成本资产回本周期</div>
-                <div class="result-value" style="color: #d35400;" id="roi-days">0 天</div>
+                <div class="result-value" style="color: var(--accent);" id="roi-days">0 天</div>
                 <div class="result-sub">以 14,527 元初始投资计算</div>
             </div>
 
-            <div class="static-data" style="background-color: transparent; border: 1px dashed var(--border); margin-top: 20px;">
-                <span>日均预估订单量</span>
-                <strong style="color: var(--primary);" id="daily-orders">0 单</strong>
+            <div class="static-data" style="background-color: transparent; border: 1px dashed var(--border); margin-top: 15px;">
+                <span>日均预估消化库存量</span>
+                <strong style="color: var(--primary);" id="daily-orders">0 套</strong>
             </div>
 
             <div class="note">
-                * 注释：模型内置阶梯降点激励算法。若月流水突破 100,000 元（超额达成），溢出部分阳光百货将自动触发让利机制，将扣点降至 12%，用以反哺供货方及补贴一线唤醒师服务提成。
+                * 注释：模型已将100%连带率的理想状态解除。客单价分为【基础包】(裸熊+棉花+心跳+录音)与【增项包】(高毛利服饰配饰)。系统将根据滑块动态重算 BOM 及 ATV。<br>
+                * 若月流水突破 10万，溢出部分阳光百货抽成自动降至 12%。
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // 常量定义 (基于首轮供应链真实报价)
-    const CAPEX = 14527; // 单机+100库存总额
-    const UNIT_BOM = 70.0;
-    const UNIT_ATV = 189.6;
+    // 常量定义 (MVP启动硬成本)
+    const CAPEX = 14527; 
+
+    // V2 拆分产品矩阵逻辑
+    // 基础体验包 (皮囊22 + 棉花2.6 + 心跳盒10.8 + 录音盒13.8)
+    const BASE_BOM = 49.2; 
+    // 基础零售价 (皮囊59.9 + 心跳盒29.9 + 录音盒39.9)
+    const BASE_RETAIL = 129.7;
+
+    // 增项服饰配饰包均值 (如: 裙子进价29+配饰6 = 35)
+    const ADDON_BOM = 35.0;
+    // 增项零售价 (如: 裙子79.9+配饰19.9 ≈ 100)
+    const ADDON_RETAIL = 100.0;
 
     // 获取 DOM 元素
-    const inputs = ['traffic', 'capture', 'conversion', 'commission'];
+    const inputs = ['traffic', 'capture', 'conversion', 'commission', 'addon-rate'];
     const elements = {};
     inputs.forEach(id => {
         elements[id] = document.getElementById(id);
         elements['val_' + id] = document.getElementById('val-' + id);
-        
-        // 绑定事件监听
         elements[id].addEventListener('input', updateModel);
     });
 
@@ -223,29 +253,43 @@
     const elRoiDays = document.getElementById('roi-days');
     const elDailyOrders = document.getElementById('daily-orders');
     const elCommNote = document.getElementById('commission-note');
+    
+    // 动态显示 ATV 和 BOM
+    const elDisplayATV = document.getElementById('display-atv');
+    const elDisplayBOM = document.getElementById('display-bom');
 
     // 货币格式化函数
     const formatCurrency = (num) => '¥ ' + num.toLocaleString('zh-CN', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+    const formatDecimal = (num) => '¥ ' + num.toLocaleString('zh-CN', {minimumFractionDigits: 1, maximumFractionDigits: 1});
 
     // 核心计算逻辑
     function updateModel() {
-        // 更新显示数值
+        // 更新滑块显示数值
         elements.val_traffic.innerText = elements.traffic.value;
         elements.val_capture.innerText = elements.capture.value;
         elements.val_conversion.innerText = elements.conversion.value;
         elements.val_commission.innerText = elements.commission.value;
+        elements['val_addon-rate'].innerText = elements['addon-rate'].value;
 
         // 获取当前变量
         const dailyTraffic = parseFloat(elements.traffic.value);
         const captureRate = parseFloat(elements.capture.value) / 100;
         const conversionRate = parseFloat(elements.conversion.value) / 100;
         const baseCommRate = parseFloat(elements.commission.value) / 100;
+        const addonRate = parseFloat(elements['addon-rate'].value) / 100;
+
+        // 动态计算单客 BOM 和 ATV
+        const currentBOM = BASE_BOM + (ADDON_BOM * addonRate);
+        const currentATV = BASE_RETAIL + (ADDON_RETAIL * addonRate);
+
+        elDisplayATV.innerText = formatDecimal(currentATV);
+        elDisplayBOM.innerText = formatDecimal(currentBOM);
 
         // 计算订单与流水
         const dailyOrders = dailyTraffic * captureRate * conversionRate;
         const monthlyOrders = dailyOrders * 30;
-        const monthlyGMV = monthlyOrders * UNIT_ATV;
-        const monthlyBOM = monthlyOrders * UNIT_BOM;
+        const monthlyGMV = monthlyOrders * currentATV;
+        const monthlyBOM_Total = monthlyOrders * currentBOM;
 
         // 阶梯扣点逻辑 (突破10万流水，超出部分按12%扣取)
         let mallRevenue = 0;
@@ -259,14 +303,14 @@
         }
 
         // 卖家利润 (总流水 - 物料成本 - 商场抽成)
-        const partnerProfit = monthlyGMV - monthlyBOM - mallRevenue;
+        const partnerProfit = monthlyGMV - monthlyBOM_Total - mallRevenue;
 
         // 投资回报期 (CapEx / 每日利润)
         const dailyPartnerProfit = partnerProfit / 30;
         let roiDays = dailyPartnerProfit > 0 ? Math.ceil(CAPEX / dailyPartnerProfit) : Infinity;
 
         // 渲染数据
-        elDailyOrders.innerText = dailyOrders.toFixed(1) + ' 单';
+        elDailyOrders.innerText = dailyOrders.toFixed(1) + ' 套';
         elMallRev.innerText = formatCurrency(mallRevenue);
         elPartnerProfit.innerText = formatCurrency(partnerProfit);
         
@@ -275,15 +319,15 @@
             elRoiDays.style.color = '#e74c3c';
         } else {
             elRoiDays.innerText = roiDays + ' 天';
-            elRoiDays.style.color = '#d35400';
+            elRoiDays.style.color = 'var(--accent)';
         }
 
         if(isTiered) {
-            elCommNote.innerText = "🎉 触发阶梯让利机制 (超额部分12%)";
-            elCommNote.style.color = "#e67e22";
+            elCommNote.innerText = "🎉 触发阶梯让利机制 (溢出部分按 12% 抽成)";
+            elCommNote.style.color = "var(--accent)";
         } else {
-            elCommNote.innerText = "按基础设定的扣点率计算";
-            elCommNote.style.color = "#7f8c8d";
+            elCommNote.innerText = "未达阶梯目标，按基础扣点率核算";
+            elCommNote.style.color = "var(--text-light)";
         }
     }
 
