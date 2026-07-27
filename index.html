@@ -1,8 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>熊猫造梦局 | 全链路量化财务沙盘 V4 (终极版)</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #e67e22;
+            --bg-body: #f4f7f6;
+            --bg-panel: #ffffff;
+            --border: #e0e6ed;
+            --text-main: #333333;
+            --text-sub: #7f8c8d;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0; padding: 20px; line-height: 1.6;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: var(--primary); margin: 0 0 10px 0; font-size: 1.8rem; }
+        .header p { color: var(--text-sub); margin: 0; font-size: 0.95rem; }
+        
+        .grid { display: grid; grid-template-columns: 1fr; gap: 25px; }
+        @media(min-width: 850px) { .grid { grid-template-columns: 3fr 2fr; } }
+        
+        .panel {
+            background: var(--bg-panel); border-radius: 10px;
+            padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+        }
+        .panel-title {
+            font-size: 1.1rem; color: var(--primary); font-weight: 700;
+            border-bottom: 2px solid var(--secondary); padding-bottom: 8px;
+            margin-top: 0; margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        /* 表单控件 */
+        .control-group { margin-bottom: 18px; }
+        .control-label {
+            display: flex; justify-content: space-between;
+            font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--text-main);
+        }
+        .val-display { color: var(--secondary); font-weight: 700; }
+        .accent-val { color: var(--accent); font-weight: 700; }
+        input[type="range"] { width: 100%; accent-color: var(--secondary); cursor: pointer; }
+        
+        /* 折叠面板 (BOM配置) */
+        .accordion {
+            background-color: #f8f9fa; border: 1px solid var(--border);
+            border-radius: 8px; margin-bottom: 25px; overflow: hidden;
+        }
+        .accordion-header {
+            padding: 12px 15px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+            display: flex; justify-content: space-between; background: #fdfbf7;
+        }
+        .accordion-content { padding: 15px; border-top: 1px solid var(--border); display: none; }
+        .accordion-content.active { display: block; }
+        .bom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .bom-item { font-size: 0.85rem; display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding-bottom: 4px; align-items: center;}
+        .bom-input { width: 60px; text-align: right; border: 1px solid #ccc; border-radius: 4px; padding: 4px; font-size: 0.85rem;}
+
+        /* 结果展示卡片 */
+        .kpi-box {
+            background: linear-gradient(135deg, #fdfbf7 0%, #f4f7f6 100%);
+            border: 1px solid var(--secondary); border-radius: 8px;
+            padding: 18px; margin-bottom: 15px; text-align: center;
+        }
+        .kpi-box.main { background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-color: var(--primary); }
+        .kpi-box.alert { background: linear-gradient(135deg, #fffcf5 0%, #fff3e0 100%); border-color: var(--accent); }
+        .kpi-title { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 5px; }
+        .kpi-value { font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .kpi-value.green { color: var(--secondary); }
+        .kpi-value.orange { color: var(--accent); }
+        .kpi-sub { font-size: 0.75rem; color: var(--text-main); margin-top: 6px; }
+
+        /* 双轨对比如下 */
+        .split-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .split-col { flex: 1; background: #f8f9fa; padding: 10px; border-radius: 6px; text-align: center; border: 1px solid var(--border); }
+        .split-title { font-size: 0.8rem; color: var(--text-sub); }
+        .split-val { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>熊猫造梦局 | 全链路财务沙盘 V4</h1>
+        <p>波段客流压测 × O2O阶梯联营博弈 × OpEx净利核算</p>
+    </div>
+
+    <div class="grid">
+        <!-- 左侧：参数输入控制台 -->
+        <div class="panel">
+            <div class="panel-title">⚙️ 运营与联营参数控制台</div>
+            
+            <!-- 隐藏的BOM配置池 -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleBOM()">
+                    <span>📦 底层 BOM 进价配置 (点击展开/收起)</span>
+                    <span id="bom-icon">▼</span>
+                </div>
+                <div class="accordion-content" id="bom-panel">
+                    <div class="bom-grid">
+                        <div class="bom-item"><span>皮囊(均价)</span><input type="number" class="bom-input" id="bom-skin" value="22.0"></div>
+                        <div class="bom-item"><span>珍珠棉耗材</span><input type="number" class="bom-input" id="bom-cotton" value="2.6"></div>
+                        <div class="bom-item"><span>录音盒</span><input type="number" class="bom-input" id="bom-voice" value="13.8"></div>
+                        <div class="bom-item"><span>普通红心</span><input type="number" class="bom-input" id="bom-heart1" value="0.5"></div>
+                        <div class="bom-item"><span>心跳盒(高配)</span><input type="number" class="bom-input" id="bom-heart2" value="10.8"></div>
+                        <div class="bom-item"><span>包装礼盒</span><input type="number" class="bom-input" id="bom-box" value="7.8"></div>
+                        <div class="bom-item"><span>高定服饰</span><input type="number" class="bom-input" id="bom-cloth" value="28.0"></div>
+                        <div class="bom-item"><span>微缩配饰</span><input type="number" class="bom-input" id="bom-acc" value="6.0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 客流波动模型 -->
+            <div class="control-group">
+                <div class="control-label"><span>工作日自然客流 (22天/月)</span> <span class="val-display" id="val-traffic-wd">3000 人/天</span></div>
+                <input type="range" id="traffic-wd" min="500" max="10000" step="500" value="3000">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>周末/节假日客流 (8天/月)</span> <span class="val-display" id="val-traffic-we">8000 人/天</span></div>
+                <input type="range" id="traffic-we" min="1000" max="20000" step="1000" value="8000">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>漏斗综合转化率 (进店+成单)</span> <span class="val-display" id="val-conversion">0.6 %</span></div>
+                <input type="range" id="conversion" min="0.1" max="5.0" step="0.1" value="0.6">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>169元豪华套餐 选购占比</span> <span class="accent-val" id="val-luxury">60 %</span></div>
+                <input type="range" id="luxury" min="0" max="100" step="5" value="60">
+            </div>
+
+            <hr style="border:0; border-top:1px dashed #ddd; margin: 25px 0;">
+
+            <!-- 联营与刚性成本 -->
+            <div class="control-group">
+                <div class="control-label"><span>🔥 联营阶梯降点触发线 (月流水)</span> <span class="accent-val" id="val-target">100,000 元</span></div>
+                <input type="range" id="target-gmv" min="50000" max="300000" step="10000" value="100000">
+            </div>
+            <div class="split-row" style="margin-bottom: 20px;">
+                <div style="flex:1;">
+                    <div class="control-label" style="font-size:0.8rem;">保底扣点(%) <span class="val-display" id="val-comm-base">18</span></div>
+                    <input type="range" id="comm-base" min="10" max="30" step="1" value="18">
+                </div>
+                <div style="flex:1;">
+                    <div class="control-label" style="font-size:0.8rem;">超额阶梯扣点(%) <span class="accent-val" id="val-comm-high">12</span></div>
+                    <input type="range" id="comm-high" min="5" max="20" step="1" value="12">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>💼 OpEx: 日均人力薪资及损耗杂费</span> <span class="val-display" id="val-opex">400 元/天</span></div>
+                <input type="range" id="opex" min="100" max="1500" step="50" value="400">
+            </div>
+        </div>
+
+        <!-- 右侧：数据输出看板 -->
+        <div class="panel">
+            <div class="panel-title">📊 财务核心看板 (月度预估)</div>
+
+            <div class="split-row">
+                <div class="split-col">
+                    <div class="split-title">月度总成单数</div>
+                    <div class="split-val" id="out-orders">0 单</div>
+                </div>
+                <div class="split-col">
+                    <div class="split-title">单客加权 ATV</div>
+                    <div class="split-val" id="out-atv">¥ 0.0</div>
+                </div>
+            </div>
+
+            <div class="kpi-box main">
+                <div class="kpi-title">阳光百货联营总收益 (商场方)</div>
+                <div class="kpi-value green" id="out-mall-rev">¥ 0</div>
+                <div class="kpi-sub" id="out-comm-status">正在计算...</div>
+            </div>
+
+            <div class="kpi-box">
+                <div class="kpi-title">合作方净利润 (卖方盈亏生死线)</div>
+                <div class="kpi-value" id="out-partner-net">¥ 0</div>
+                <div class="kpi-sub">公式：总流水 - BOM进价 - 商场扣点 - <span style="color:#e74c3c;">人力杂费(OpEx)</span></div>
+            </div>
+
+            <div class="kpi-box alert">
+                <div class="kpi-title">MVP 测试期回本周期 (卖方视角)</div>
+                <div class="kpi-value orange" id="out-roi">0 天</div>
+                <div class="kpi-sub">基准初始沉没资产投资定额：<br>¥ 14,527 (单台设备 + 100套双层级库存)</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    // 初始固定资本
+    // 初始固定资本与零售定价
     const CAPEX = 14527; 
-    
-    // 零售固定定价
     const PRICE_BASIC = 89.0;
     const PRICE_LUXURY = 169.0;
 
@@ -17,106 +214,115 @@
         }
     }
 
-    // 格式化函数
+    // 格式化辅助函数
     const fmtC = (n) => '¥ ' + Math.round(n).toLocaleString('zh-CN');
     
     // 核心算法
     function updateModel() {
-        // 更新滑块前端文本显示
-        document.getElementById('val-traffic-wd').innerText = document.getElementById('traffic-wd').value + ' 人/天';
-        document.getElementById('val-traffic-we').innerText = document.getElementById('traffic-we').value + ' 人/天';
-        document.getElementById('val-conversion').innerText = document.getElementById('conversion').value + ' %';
-        document.getElementById('val-luxury').innerText = document.getElementById('luxury').value + ' %';
-        document.getElementById('val-target').innerText = parseInt(document.getElementById('target-gmv').value).toLocaleString() + ' 元';
-        document.getElementById('val-comm-base').innerText = document.getElementById('comm-base').value;
-        document.getElementById('val-comm-high').innerText = document.getElementById('comm-high').value;
-        document.getElementById('val-opex').innerText = document.getElementById('opex').value + ' 元/天';
+        try {
+            // 1. 更新滑块前端文本显示
+            document.getElementById('val-traffic-wd').innerText = document.getElementById('traffic-wd').value + ' 人/天';
+            document.getElementById('val-traffic-we').innerText = document.getElementById('traffic-we').value + ' 人/天';
+            document.getElementById('val-conversion').innerText = document.getElementById('conversion').value + ' %';
+            document.getElementById('val-luxury').innerText = document.getElementById('luxury').value + ' %';
+            document.getElementById('val-target').innerText = parseInt(document.getElementById('target-gmv').value).toLocaleString() + ' 元';
+            document.getElementById('val-comm-base').innerText = document.getElementById('comm-base').value;
+            document.getElementById('val-comm-high').innerText = document.getElementById('comm-high').value;
+            document.getElementById('val-opex').innerText = document.getElementById('opex').value + ' 元/天';
 
-        // 1. 获取动态 BOM 成本
-        const bSkin = parseFloat(document.getElementById('bom-skin').value);
-        const bCotton = parseFloat(document.getElementById('bom-cotton').value);
-        const bVoice = parseFloat(document.getElementById('bom-voice').value);
-        const bHeart1 = parseFloat(document.getElementById('bom-heart1').value);
-        const bHeart2 = parseFloat(document.getElementById('bom-heart2').value);
-        const bBox = parseFloat(document.getElementById('bom-box').value);
-        const bCloth = parseFloat(document.getElementById('bom-cloth').value);
-        const bAcc = parseFloat(document.getElementById('bom-acc').value);
+            // 2. 获取并验证动态 BOM 成本
+            const bSkin = parseFloat(document.getElementById('bom-skin').value) || 0;
+            const bCotton = parseFloat(document.getElementById('bom-cotton').value) || 0;
+            const bVoice = parseFloat(document.getElementById('bom-voice').value) || 0;
+            const bHeart1 = parseFloat(document.getElementById('bom-heart1').value) || 0;
+            const bHeart2 = parseFloat(document.getElementById('bom-heart2').value) || 0;
+            const bBox = parseFloat(document.getElementById('bom-box').value) || 0;
+            const bCloth = parseFloat(document.getElementById('bom-cloth').value) || 0;
+            const bAcc = parseFloat(document.getElementById('bom-acc').value) || 0;
 
-        const costBasic = bSkin + bCotton + bVoice + bHeart1 + bBox;
-        const costLuxury = costBasic - bHeart1 + bHeart2 + bCloth + bAcc;
+            const costBasic = bSkin + bCotton + bVoice + bHeart1 + bBox;
+            const costLuxury = costBasic - bHeart1 + bHeart2 + bCloth + bAcc;
 
-        // 2. 获取运营变量
-        const tWd = parseFloat(document.getElementById('traffic-wd').value);
-        const tWe = parseFloat(document.getElementById('traffic-we').value);
-        const conv = parseFloat(document.getElementById('conversion').value) / 100;
-        const rLux = parseFloat(document.getElementById('luxury').value) / 100;
-        const rBas = 1 - rLux;
-        
-        const targetGMV = parseFloat(document.getElementById('target-gmv').value);
-        const cBase = parseFloat(document.getElementById('comm-base').value) / 100;
-        const cHigh = parseFloat(document.getElementById('comm-high').value) / 100;
-        const dailyOpex = parseFloat(document.getElementById('opex').value);
+            // 3. 获取并验证运营变量
+            const tWd = parseFloat(document.getElementById('traffic-wd').value) || 0;
+            const tWe = parseFloat(document.getElementById('traffic-we').value) || 0;
+            const conv = (parseFloat(document.getElementById('conversion').value) || 0) / 100;
+            const rLux = (parseFloat(document.getElementById('luxury').value) || 0) / 100;
+            const rBas = 1 - rLux;
+            
+            const targetGMV = parseFloat(document.getElementById('target-gmv').value) || 0;
+            const cBase = (parseFloat(document.getElementById('comm-base').value) || 0) / 100;
+            const cHigh = (parseFloat(document.getElementById('comm-high').value) || 0) / 100;
+            const dailyOpex = parseFloat(document.getElementById('opex').value) || 0;
 
-        // 3. 订单与加权指标计算
-        // 假设每月 22 个工作日，8 个周末/节假日
-        const monthlyOrders = ((tWd * 22) + (tWe * 8)) * conv;
-        const avgATV = (PRICE_BASIC * rBas) + (PRICE_LUXURY * rLux);
-        const avgBOM = (costBasic * rBas) + (costLuxury * rLux);
-        
-        const monthlyGMV = monthlyOrders * avgATV;
-        const monthlyBOMTotal = monthlyOrders * avgBOM;
-        const monthlyOpexTotal = dailyOpex * 30;
+            // 4. 订单与加权指标计算
+            const monthlyOrders = ((tWd * 22) + (tWe * 8)) * conv;
+            const avgATV = (PRICE_BASIC * rBas) + (PRICE_LUXURY * rLux);
+            const avgBOM = (costBasic * rBas) + (costLuxury * rLux);
+            
+            const monthlyGMV = monthlyOrders * avgATV;
+            const monthlyBOMTotal = monthlyOrders * avgBOM;
+            const monthlyOpexTotal = dailyOpex * 30;
 
-        // 4. 阶梯扣点博弈模型
-        let mallRev = 0;
-        let commStatus = "";
-        if (monthlyGMV <= targetGMV) {
-            mallRev = monthlyGMV * cBase;
-            commStatus = `未达降点线，全额按保底 ${document.getElementById('comm-base').value}% 抽成`;
-        } else {
-            const basePart = targetGMV * cBase;
-            const highPart = (monthlyGMV - targetGMV) * cHigh;
-            mallRev = basePart + highPart;
-            commStatus = `🎉 突破 ${document.getElementById('target-gmv').value} 元！超额部分已按 ${document.getElementById('comm-high').value}% 让利降扣`;
-        }
+            // 5. 阶梯扣点博弈模型
+            let mallRev = 0;
+            let commStatus = "";
+            if (monthlyGMV <= targetGMV) {
+                mallRev = monthlyGMV * cBase;
+                commStatus = `未达降点线，全额按保底 ${document.getElementById('comm-base').value}% 抽成`;
+            } else {
+                const basePart = targetGMV * cBase;
+                const highPart = (monthlyGMV - targetGMV) * cHigh;
+                mallRev = basePart + highPart;
+                commStatus = `🎉 突破 ${document.getElementById('target-gmv').value} 元！超额部分已按 ${document.getElementById('comm-high').value}% 让利降扣`;
+            }
 
-        // 5. 卖家净利润生死线
-        const partnerNet = monthlyGMV - monthlyBOMTotal - mallRev - monthlyOpexTotal;
-        
-        // 6. 投资回报率
-        const dailyNet = partnerNet / 30;
-        let roi = dailyNet > 0 ? Math.ceil(CAPEX / dailyNet) : Infinity;
+            // 6. 卖家净利润生死线
+            const partnerNet = monthlyGMV - monthlyBOMTotal - mallRev - monthlyOpexTotal;
+            
+            // 7. 投资回报率
+            const dailyNet = partnerNet / 30;
+            let roi = dailyNet > 0 ? Math.ceil(CAPEX / dailyNet) : Infinity;
 
-        // 7. 渲染 DOM 输出
-        document.getElementById('out-orders').innerText = Math.round(monthlyOrders) + ' 单';
-        document.getElementById('out-atv').innerText = '¥ ' + avgATV.toFixed(1);
-        document.getElementById('out-mall-rev').innerText = fmtC(mallRev);
-        document.getElementById('out-comm-status').innerText = commStatus;
-        
-        const elPartnerNet = document.getElementById('out-partner-net');
-        elPartnerNet.innerText = fmtC(partnerNet);
-        elPartnerNet.style.color = partnerNet < 0 ? '#e74c3c' : 'var(--primary)';
+            // 8. 渲染输出
+            document.getElementById('out-orders').innerText = Math.round(monthlyOrders) + ' 单';
+            document.getElementById('out-atv').innerText = '¥ ' + avgATV.toFixed(1);
+            document.getElementById('out-mall-rev').innerText = fmtC(mallRev);
+            document.getElementById('out-comm-status').innerText = commStatus;
+            
+            const elPartnerNet = document.getElementById('out-partner-net');
+            elPartnerNet.innerText = fmtC(partnerNet);
+            elPartnerNet.style.color = partnerNet < 0 ? '#e74c3c' : 'var(--primary)';
 
-        const elRoi = document.getElementById('out-roi');
-        if (roi === Infinity || roi < 0) {
-            elRoi.innerText = '持续亏损';
-            elRoi.style.color = '#e74c3c';
-        } else {
-            elRoi.innerText = roi + ' 天';
-            elRoi.style.color = 'var(--accent)';
+            const elRoi = document.getElementById('out-roi');
+            if (roi === Infinity || roi < 0) {
+                elRoi.innerText = '持续亏损';
+                elRoi.style.color = '#e74c3c';
+            } else {
+                elRoi.innerText = roi + ' 天';
+                elRoi.style.color = 'var(--accent)';
+            }
+        } catch (error) {
+            console.error("模型计算出现错误:", error);
         }
     }
 
-    // 绑定所有的输入事件
-    const inputIds = ['traffic-wd', 'traffic-we', 'conversion', 'luxury', 'target-gmv', 'comm-base', 'comm-high', 'opex', 'bom-skin', 'bom-cotton', 'bom-voice', 'bom-heart1', 'bom-heart2', 'bom-box', 'bom-cloth', 'bom-acc'];
-    inputIds.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) {
-            el.addEventListener('input', updateModel);
-            el.addEventListener('change', updateModel);
-        }
-    });
+    // 在整个 HTML 框架加载完毕后绑定事件并初始化
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputIds = ['traffic-wd', 'traffic-we', 'conversion', 'luxury', 'target-gmv', 'comm-base', 'comm-high', 'opex', 'bom-skin', 'bom-cotton', 'bom-voice', 'bom-heart1', 'bom-heart2', 'bom-box', 'bom-cloth', 'bom-acc'];
+        
+        inputIds.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) {
+                // 兼容不同浏览器的拖拽和手动输入事件
+                el.addEventListener('input', updateModel);
+                el.addEventListener('change', updateModel);
+            }
+        });
 
-    // 页面加载完毕后进行首次初始化计算
-    updateModel();
+        // 执行首次计算，点亮数据
+        updateModel();
+    });
 </script>
+</body>
+</html>
