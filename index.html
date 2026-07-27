@@ -9,6 +9,7 @@
             --primary: #2c3e50;
             --secondary: #27ae60;
             --accent: #e67e22;
+            --highlight: #e74c3c;
             --bg-body: #f4f7f6;
             --bg-panel: #ffffff;
             --border: #e0e6ed;
@@ -71,7 +72,8 @@
         .accordion-content.active { display: block; }
         .bom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .bom-item { font-size: 0.85rem; display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding-bottom: 4px; align-items: center;}
-        .bom-input { width: 60px; text-align: right; border: 1px solid #ccc; border-radius: 4px; padding: 4px; font-size: 0.85rem;}
+        .bom-item.special { background: #fff3e0; padding: 4px 8px; border-radius: 4px; border-bottom: none; border: 1px solid #ffe0b2; }
+        .bom-input { width: 55px; text-align: right; border: 1px solid #ccc; border-radius: 4px; padding: 4px; font-size: 0.85rem;}
 
         /* 表单控件 */
         .control-group { margin-bottom: 20px; }
@@ -81,7 +83,9 @@
         }
         .val-display { color: var(--secondary); font-weight: 700; }
         .accent-val { color: var(--accent); font-weight: 700; }
+        .highlight-val { color: var(--highlight); font-weight: 700; }
         input[type="range"] { width: 100%; accent-color: var(--secondary); cursor: pointer; }
+        input[type="range"].addon-slider { accent-color: var(--highlight); }
         
         /* 比例滑块特殊样式 */
         .ratio-display { font-size: 0.85rem; font-weight: 700; }
@@ -112,8 +116,8 @@
 
 <div class="container">
     <div class="header">
-        <h1>熊猫造梦局 | 全链路财务沙盘 V5</h1>
-        <p>动态定价测试 × 波段客流压测 × O2O阶梯联营博弈</p>
+        <h1>熊猫造梦局 | 全链路财务沙盘 V6</h1>
+        <p>散件连带利润放大器 × 波段客流压测 × O2O阶梯联营博弈</p>
     </div>
 
     <div class="grid">
@@ -136,7 +140,7 @@
 
             <div class="accordion">
                 <div class="accordion-header" onclick="toggleBOM()">
-                    <span>📦 底层 BOM 进价配置 (点击展开调参)</span>
+                    <span>📦 底层 BOM 进价配置 (含散件连带定义)</span>
                     <span id="bom-icon">▼</span>
                 </div>
                 <div class="accordion-content" id="bom-panel">
@@ -149,6 +153,11 @@
                         <div class="bom-item"><span>包装礼盒</span><input type="number" class="bom-input" id="bom-box" value="7.8"></div>
                         <div class="bom-item"><span>高定服饰</span><input type="number" class="bom-input" id="bom-cloth" value="28.0"></div>
                         <div class="bom-item"><span>微缩配饰</span><input type="number" class="bom-input" id="bom-acc" value="6.0"></div>
+                    </div>
+                    <!-- 新增额外散件配置 -->
+                    <div class="bom-grid" style="margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;">
+                        <div class="bom-item special"><span>额外散件(零售价)</span><input type="number" class="bom-input" id="price-addon" value="39.0"></div>
+                        <div class="bom-item special"><span>额外散件(BOM进价)</span><input type="number" class="bom-input" id="bom-addon" value="8.0"></div>
                     </div>
                 </div>
             </div>
@@ -164,18 +173,29 @@
                 <input type="range" id="traffic-we" min="1000" max="20000" step="1000" value="8000">
             </div>
             <div class="control-group">
-                <div class="control-label"><span>漏斗综合转化率 (进店+成单)</span> <span class="val-display" id="val-conversion">0.6 %</span></div>
-                <input type="range" id="conversion" min="0.1" max="5.0" step="0.1" value="0.6">
+                <div class="control-label"><span>漏斗综合转化率 (进店+买单)</span> <span class="val-display" id="val-conversion">0.8 %</span></div>
+                <input type="range" id="conversion" min="0.1" max="5.0" step="0.1" value="0.8">
             </div>
+            
             <div class="control-group">
                 <div class="control-label">
-                    <span>双套餐选购占比分流</span> 
+                    <span>主套餐选购占比分流</span> 
                     <span class="ratio-display">
-                        <span class="ratio-basic">基础 <span id="val-ratio-basic">40</span>%</span> | 
-                        <span class="ratio-luxury">豪华 <span id="val-ratio-luxury">60</span>%</span>
+                        <span class="ratio-basic">基础 <span id="val-ratio-basic">80</span>%</span> | 
+                        <span class="ratio-luxury">豪华 <span id="val-ratio-luxury">20</span>%</span>
                     </span>
                 </div>
-                <input type="range" id="luxury-ratio" min="0" max="100" step="5" value="60">
+                <input type="range" id="luxury-ratio" min="0" max="100" step="5" value="20">
+            </div>
+
+            <!-- V6 新增：全客群额外散件连带率 -->
+            <div class="control-group" style="background: #fff8e1; padding: 10px; border-radius: 6px; border-left: 4px solid var(--highlight);">
+                <div class="control-label">
+                    <span style="color:var(--highlight);">✨ 全客群额外散件连带率 (交叉销售)</span> 
+                    <span class="highlight-val" id="val-addon-rate">30 %</span>
+                </div>
+                <input type="range" class="addon-slider" id="addon-rate" min="0" max="100" step="5" value="30">
+                <div style="font-size: 0.75rem; color: #7f8c8d; margin-top: 4px;">注：即付款顾客中，有多大比例会额外加购一件散件（如包包/眼镜）。此为高毛利利润泵。</div>
             </div>
 
             <hr style="border:0; border-top:1px dashed #ddd; margin: 25px 0;">
@@ -210,8 +230,8 @@
                     <div class="split-val" id="out-orders">0 单</div>
                 </div>
                 <div class="split-col">
-                    <div class="split-title">单客加权 ATV</div>
-                    <div class="split-val" id="out-atv">¥ 0.0</div>
+                    <div class="split-title">单客加权 ATV (含连带)</div>
+                    <div class="split-val" id="out-atv" style="color:var(--highlight);">¥ 0.0</div>
                 </div>
             </div>
 
@@ -224,7 +244,7 @@
             <div class="kpi-box">
                 <div class="kpi-title">合作方净利润 (卖方盈亏生死线)</div>
                 <div class="kpi-value" id="out-partner-net">¥ 0</div>
-                <div class="kpi-sub">公式：总流水 - BOM进价 - 商场扣点 - <span style="color:#e74c3c;">人力杂费(OpEx)</span></div>
+                <div class="kpi-sub">公式：总流水 - 综合BOM - 商场扣点 - <span style="color:#e74c3c;">人力杂费(OpEx)</span></div>
             </div>
 
             <div class="kpi-box alert">
@@ -253,11 +273,12 @@
     
     function updateModel() {
         try {
-            // 1. 获取并验证零售定价
+            // 1. 获取零售定价
             const priceBasic = parseFloat(document.getElementById('price-basic').value) || 0;
             const priceLuxury = parseFloat(document.getElementById('price-luxury').value) || 0;
+            const priceAddon = parseFloat(document.getElementById('price-addon').value) || 0;
 
-            // 2. 获取并验证动态 BOM 成本
+            // 2. 获取 BOM 成本
             const bSkin = parseFloat(document.getElementById('bom-skin').value) || 0;
             const bCotton = parseFloat(document.getElementById('bom-cotton').value) || 0;
             const bVoice = parseFloat(document.getElementById('bom-voice').value) || 0;
@@ -266,15 +287,15 @@
             const bBox = parseFloat(document.getElementById('bom-box').value) || 0;
             const bCloth = parseFloat(document.getElementById('bom-cloth').value) || 0;
             const bAcc = parseFloat(document.getElementById('bom-acc').value) || 0;
+            const bomAddon = parseFloat(document.getElementById('bom-addon').value) || 0;
 
             const costBasic = bSkin + bCotton + bVoice + bHeart1 + bBox;
             const costLuxury = costBasic - bHeart1 + bHeart2 + bCloth + bAcc;
 
-            // 更新卡片上的BOM显示
             document.getElementById('out-bom-basic').innerText = '¥' + costBasic.toFixed(1);
             document.getElementById('out-bom-luxury').innerText = '¥' + costLuxury.toFixed(1);
 
-            // 3. 更新滑块前端文本显示
+            // 3. 更新前端文本显示
             document.getElementById('val-traffic-wd').innerText = document.getElementById('traffic-wd').value + ' 人/天';
             document.getElementById('val-traffic-we').innerText = document.getElementById('traffic-we').value + ' 人/天';
             document.getElementById('val-conversion').innerText = document.getElementById('conversion').value + ' %';
@@ -282,34 +303,39 @@
             const rLuxVal = document.getElementById('luxury-ratio').value;
             document.getElementById('val-ratio-luxury').innerText = rLuxVal;
             document.getElementById('val-ratio-basic').innerText = 100 - rLuxVal;
+            
+            document.getElementById('val-addon-rate').innerText = document.getElementById('addon-rate').value + ' %';
 
             document.getElementById('val-target').innerText = parseInt(document.getElementById('target-gmv').value).toLocaleString() + ' 元';
             document.getElementById('val-comm-base').innerText = document.getElementById('comm-base').value;
             document.getElementById('val-comm-high').innerText = document.getElementById('comm-high').value;
             document.getElementById('val-opex').innerText = document.getElementById('opex').value + ' 元/天';
 
-            // 4. 获取运营变量
+            // 4. 获取计算变量
             const tWd = parseFloat(document.getElementById('traffic-wd').value) || 0;
             const tWe = parseFloat(document.getElementById('traffic-we').value) || 0;
             const conv = (parseFloat(document.getElementById('conversion').value) || 0) / 100;
             const rLux = (parseFloat(document.getElementById('luxury-ratio').value) || 0) / 100;
             const rBas = 1 - rLux;
+            const addonRate = (parseFloat(document.getElementById('addon-rate').value) || 0) / 100;
             
             const targetGMV = parseFloat(document.getElementById('target-gmv').value) || 0;
             const cBase = (parseFloat(document.getElementById('comm-base').value) || 0) / 100;
             const cHigh = (parseFloat(document.getElementById('comm-high').value) || 0) / 100;
             const dailyOpex = parseFloat(document.getElementById('opex').value) || 0;
 
-            // 5. 订单与加权指标计算
+            // 5. 核心计算：引入额外散件连带率
             const monthlyOrders = ((tWd * 22) + (tWe * 8)) * conv;
-            const avgATV = (priceBasic * rBas) + (priceLuxury * rLux);
-            const avgBOM = (costBasic * rBas) + (costLuxury * rLux);
+            // 综合客单价 = 套餐均价 + (散件单价 × 加购概率)
+            const avgATV = (priceBasic * rBas) + (priceLuxury * rLux) + (priceAddon * addonRate);
+            // 综合BOM = 套餐均价 + (散件BOM × 加购概率)
+            const avgBOM = (costBasic * rBas) + (costLuxury * rLux) + (bomAddon * addonRate);
             
             const monthlyGMV = monthlyOrders * avgATV;
             const monthlyBOMTotal = monthlyOrders * avgBOM;
             const monthlyOpexTotal = dailyOpex * 30;
 
-            // 6. 阶梯扣点博弈模型
+            // 6. 阶梯扣点
             let mallRev = 0;
             let commStatus = "";
             if (monthlyGMV <= targetGMV) {
@@ -322,7 +348,7 @@
                 commStatus = `🎉 突破 ${document.getElementById('target-gmv').value} 元！超额部分已按 ${document.getElementById('comm-high').value}% 让利降扣`;
             }
 
-            // 7. 卖家净利润生死线
+            // 7. 净利润计算
             const partnerNet = monthlyGMV - monthlyBOMTotal - mallRev - monthlyOpexTotal;
             
             // 8. 投资回报率
@@ -354,9 +380,9 @@
 
     document.addEventListener("DOMContentLoaded", function() {
         const inputIds = [
-            'price-basic', 'price-luxury',
-            'bom-skin', 'bom-cotton', 'bom-voice', 'bom-heart1', 'bom-heart2', 'bom-box', 'bom-cloth', 'bom-acc',
-            'traffic-wd', 'traffic-we', 'conversion', 'luxury-ratio', 
+            'price-basic', 'price-luxury', 'price-addon',
+            'bom-skin', 'bom-cotton', 'bom-voice', 'bom-heart1', 'bom-heart2', 'bom-box', 'bom-cloth', 'bom-acc', 'bom-addon',
+            'traffic-wd', 'traffic-we', 'conversion', 'luxury-ratio', 'addon-rate',
             'target-gmv', 'comm-base', 'comm-high', 'opex'
         ];
         
