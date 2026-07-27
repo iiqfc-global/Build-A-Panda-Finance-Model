@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>熊猫造梦局 | MVP 财务量化沙盘</title>
+    <style>
+        :root {
+            --primary: #27ae60;
+            --primary-dark: #1b3b36;
+            --bg-color: #f7f9fc;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-light: #7f8c8d;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft YaHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+        .header p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media(min-width: 768px) {
+            .grid { grid-template-columns: 1fr 1fr; }
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+        h2 {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .input-group input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+        .value-display {
+            float: right;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        .static-data {
+            background-color: var(--bg-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        .result-box {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #eef3f1 0%, #fdfbf7 100%);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--primary);
+        }
+        .result-title {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+        .result-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .result-sub {
+            font-size: 0.8rem;
+            color: var(--text-main);
+            margin-top: 5px;
+        }
+        .note {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 20px;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>熊猫造梦局 | MVP 联营财务沙盘</h1>
+        <p>纯本地运算模型 | 根据实际客流与阶梯扣点动态推演盈利指标</p>
+    </div>
+
+    <div class="grid">
+        <!-- 变量输入面板 -->
+        <div class="card">
+            <h2>📊 运营动因 (调节滑块)</h2>
+            
+            <div class="input-group">
+                <label>单日自然路过客流 (人/天) <span class="value-display" id="val-traffic">5000</span></label>
+                <input type="range" id="traffic" min="1000" max="15000" step="500" value="5000">
+            </div>
+            
+            <div class="input-group">
+                <label>中庭截留进店率 (%) <span class="value-display" id="val-capture">8</span></label>
+                <input type="range" id="capture" min="1" max="25" step="1" value="8">
+            </div>
+            
+            <div class="input-group">
+                <label>唤醒师成单转化率 (%) <span class="value-display" id="val-conversion">5</span></label>
+                <input type="range" id="conversion" min="1" max="15" step="0.5" value="5">
+            </div>
+
+            <div class="input-group">
+                <label>阳光百货基础扣点 (%) <span class="value-display" id="val-commission">18</span></label>
+                <input type="range" id="commission" min="5" max="30" step="1" value="18">
+            </div>
+
+            <h2 style="margin-top: 30px;">🔒 固定资产与产品BOM锁定参数</h2>
+            <div class="static-data">
+                <span>MVP总硬成本 (单口机+100套库存)</span>
+                <strong>¥ 14,527</strong>
+            </div>
+            <div class="static-data">
+                <span>单客综合BOM进价成本</span>
+                <strong>¥ 70.0</strong>
+            </div>
+            <div class="static-data">
+                <span>单客综合客单价预估 (ATV)</span>
+                <strong>¥ 189.6</strong>
+            </div>
+        </div>
+
+        <!-- 财务输出面板 -->
+        <div class="card">
+            <h2>📈 核心财务指标 (月度测算)</h2>
+            
+            <div class="result-box">
+                <div class="result-title">阳光百货联营收益 (月)</div>
+                <div class="result-value" id="mall-revenue">¥ 0</div>
+                <div class="result-sub" id="commission-note">按基础扣点计算</div>
+            </div>
+
+            <div class="result-box" style="border-color: #bdc3c7;">
+                <div class="result-title">卖方(联营方)账面毛利 (月)</div>
+                <div class="result-value" style="color: #2c3e50;" id="partner-profit">¥ 0</div>
+                <div class="result-sub">未扣除人工薪资及日常损耗</div>
+            </div>
+
+            <div class="result-box" style="border-color: #e67e22; background: linear-gradient(135deg, #fdfbf7 0%, #fdf5e6 100%);">
+                <div class="result-title">MVP 硬成本资产回本周期</div>
+                <div class="result-value" style="color: #d35400;" id="roi-days">0 天</div>
+                <div class="result-sub">以 14,527 元初始投资计算</div>
+            </div>
+
+            <div class="static-data" style="background-color: transparent; border: 1px dashed var(--border); margin-top: 20px;">
+                <span>日均预估订单量</span>
+                <strong style="color: var(--primary);" id="daily-orders">0 单</strong>
+            </div>
+
+            <div class="note">
+                * 注释：模型内置阶梯降点激励算法。若月流水突破 100,000 元（超额达成），溢出部分阳光百货将自动触发让利机制，将扣点降至 12%，用以反哺供货方及补贴一线唤醒师服务提成。
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 常量定义 (基于首轮供应链真实报价)
+    const CAPEX = 14527; // 单机+100库存总额
+    const UNIT_BOM = 70.0;
+    const UNIT_ATV = 189.6;
+
+    // 获取 DOM 元素
+    const inputs = ['traffic', 'capture', 'conversion', 'commission'];
+    const elements = {};
+    inputs.forEach(id => {
+        elements[id] = document.getElementById(id);
+        elements['val_' + id] = document.getElementById('val-' + id);
+        
+        // 绑定事件监听
+        elements[id].addEventListener('input', updateModel);
+    });
+
+    const elMallRev = document.getElementById('mall-revenue');
+    const elPartnerProfit = document.getElementById('partner-profit');
+    const elRoiDays = document.getElementById('roi-days');
+    const elDailyOrders = document.getElementById('daily-orders');
+    const elCommNote = document.getElementById('commission-note');
+
+    // 货币格式化函数
+    const formatCurrency = (num) => '¥ ' + num.toLocaleString('zh-CN', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+    // 核心计算逻辑
+    function updateModel() {
+        // 更新显示数值
+        elements.val_traffic.innerText = elements.traffic.value;
+        elements.val_capture.innerText = elements.capture.value;
+        elements.val_conversion.innerText = elements.conversion.value;
+        elements.val_commission.innerText = elements.commission.value;
+
+        // 获取当前变量
+        const dailyTraffic = parseFloat(elements.traffic.value);
+        const captureRate = parseFloat(elements.capture.value) / 100;
+        const conversionRate = parseFloat(elements.conversion.value) / 100;
+        const baseCommRate = parseFloat(elements.commission.value) / 100;
+
+        // 计算订单与流水
+        const dailyOrders = dailyTraffic * captureRate * conversionRate;
+        const monthlyOrders = dailyOrders * 30;
+        const monthlyGMV = monthlyOrders * UNIT_ATV;
+        const monthlyBOM = monthlyOrders * UNIT_BOM;
+
+        // 阶梯扣点逻辑 (突破10万流水，超出部分按12%扣取)
+        let mallRevenue = 0;
+        let isTiered = false;
+        
+        if(monthlyGMV > 100000) {
+            mallRevenue = (100000 * baseCommRate) + ((monthlyGMV - 100000) * 0.12);
+            isTiered = true;
+        } else {
+            mallRevenue = monthlyGMV * baseCommRate;
+        }
+
+        // 卖家利润 (总流水 - 物料成本 - 商场抽成)
+        const partnerProfit = monthlyGMV - monthlyBOM - mallRevenue;
+
+        // 投资回报期 (CapEx / 每日利润)
+        const dailyPartnerProfit = partnerProfit / 30;
+        let roiDays = dailyPartnerProfit > 0 ? Math.ceil(CAPEX / dailyPartnerProfit) : Infinity;
+
+        // 渲染数据
+        elDailyOrders.innerText = dailyOrders.toFixed(1) + ' 单';
+        elMallRev.innerText = formatCurrency(mallRevenue);
+        elPartnerProfit.innerText = formatCurrency(partnerProfit);
+        
+        if (roiDays === Infinity) {
+            elRoiDays.innerText = '无法回本';
+            elRoiDays.style.color = '#e74c3c';
+        } else {
+            elRoiDays.innerText = roiDays + ' 天';
+            elRoiDays.style.color = '#d35400';
+        }
+
+        if(isTiered) {
+            elCommNote.innerText = "🎉 触发阶梯让利机制 (超额部分12%)";
+            elCommNote.style.color = "#e67e22";
+        } else {
+            elCommNote.innerText = "按基础设定的扣点率计算";
+            elCommNote.style.color = "#7f8c8d";
+        }
+    }
+
+    // 初始化运行
+    updateModel();
+</script>
+
+</body>
+</html>
