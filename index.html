@@ -112,13 +112,13 @@
 <div class="container">
     <div class="header">
         <h1>阳光百货 | 熊猫造梦局 招商测算沙盘</h1>
-        <p>自营重资产投入对赌 × 线上流量导入压测 × 联营分账模型</p>
+        <p>自营资产投入 × 线上/自然流量导入压测 × 联营分账模型</p>
     </div>
 
     <div class="grid">
         <!-- 左侧：参数输入控制台 -->
         <div class="panel">
-            <div class="panel-title">🛒 品牌方零售定价与套餐矩阵</div>
+            <div class="panel-title">🛒 建议零售定价与套餐矩阵</div>
             
             <div class="pricing-matrix">
                 <div class="pkg-card basic">
@@ -167,13 +167,13 @@
                 <input type="range" id="traffic-we" min="1000" max="20000" step="1000" value="8000">
             </div>
             <div class="control-group">
-                <div class="control-label"><span>综合转化率 (评估品牌方销转能力)</span> <span class="val-display" id="val-conversion">0.8 %</span></div>
+                <div class="control-label"><span>综合转化率 (评估销转能力)</span> <span class="val-display" id="val-conversion">0.8 %</span></div>
                 <input type="range" id="conversion" min="0.1" max="5.0" step="0.1" value="0.8">
             </div>
             
             <div class="control-group">
                 <div class="control-label">
-                    <span>品牌方套餐选购占比分流</span> 
+                    <span>套餐选购占比分流</span> 
                     <span class="ratio-display">
                         <span class="ratio-basic">基础 <span id="val-ratio-basic">80</span>%</span> | 
                         <span class="ratio-luxury">豪华 <span id="val-ratio-luxury">20</span>%</span>
@@ -184,7 +184,7 @@
 
             <div class="control-group" style="background: #fff8e1; padding: 10px; border-radius: 6px; border-left: 4px solid var(--highlight);">
                 <div class="control-label">
-                    <span style="color:var(--highlight);">✨ 额外散件连带率 (探测品牌方极值利润)</span> 
+                    <span style="color:var(--highlight);">✨ 额外散件连带率 (探测极值利润)</span> 
                     <span class="highlight-val" id="val-addon-rate">30 %</span>
                 </div>
                 <input type="range" class="addon-slider" id="addon-rate" min="0" max="100" step="5" value="30">
@@ -193,12 +193,12 @@
             <hr style="border:0; border-top:1px dashed #ddd; margin: 25px 0;">
 
             <div class="control-group">
-                <div class="control-label"><span>🔥 对赌条款：商场阶梯降点触发线 (月流水)</span> <span class="accent-val" id="val-target">100,000 元</span></div>
+                <div class="control-label"><span>🔥 商场阶梯降点触发线 (月流水)</span> <span class="accent-val" id="val-target">100,000 元</span></div>
                 <input type="range" id="target-gmv" min="30000" max="300000" step="10000" value="100000">
             </div>
             <div class="split-row" style="margin-bottom: 20px;">
                 <div style="flex:1;">
-                    <div class="control-label" style="font-size:0.8rem;">我方保底抽成(%) <span class="val-display" id="val-comm-base">18</span></div>
+                    <div class="control-label" style="font-size:0.8rem;">阳光百货保底抽成(%) <span class="val-display" id="val-comm-base">18</span></div>
                     <input type="range" id="comm-base" min="10" max="30" step="1" value="18">
                 </div>
                 <div style="flex:1;">
@@ -207,7 +207,7 @@
                 </div>
             </div>
             <div class="control-group">
-                <div class="control-label"><span>💼 品牌驻场 OpEx: 预估日均人力杂费</span> <span class="val-display" id="val-opex">400 元/天</span></div>
+                <div class="control-label"><span>💼 卖家驻场 OpEx: 预估日均人力杂费</span> <span class="val-display" id="val-opex">400 元/天</span></div>
                 <input type="range" id="opex" min="100" max="1500" step="50" value="400">
             </div>
         </div>
@@ -218,7 +218,7 @@
 
             <div class="split-row">
                 <div class="split-col">
-                    <div class="split-title">品牌方月度成单数</div>
+                    <div class="split-title">入驻卖方月度成单数</div>
                     <div class="split-val" id="out-orders">0 单</div>
                 </div>
                 <div class="split-col">
@@ -228,7 +228,7 @@
             </div>
 
             <div class="kpi-box main">
-                <div class="kpi-title">阳光百货 (我方) 联营分账收益</div>
+                <div class="kpi-title">阳光百货联营分账收益</div>
                 <div class="kpi-value green" id="out-mall-rev">¥ 0</div>
                 <div class="kpi-sub" id="out-comm-status">正在计算...</div>
             </div>
@@ -238,16 +238,16 @@
                 <div class="kpi-title">阳光百货资产投资回本周期 (核心对赌指标)</div>
                 <div class="kpi-value orange" id="out-roi">0 天</div>
                 <div class="kpi-sub" style="line-height: 1.5;">
-                    我方全资垫付初始设备及物料：¥14,527<br>
+                    阳光百货全资垫付初始设备及物料：¥14,527<br>
                     <strong>回收路径：</strong>依据上方的【联营分账收益】纯利覆盖
                 </div>
             </div>
 
             <!-- 放在最后作为风控参考：必须让品牌方活下去 -->
             <div class="kpi-box" style="border-color: #bdc3c7; background: #f8f9fa;">
-                <div class="kpi-title">入驻品牌方 (TOP1卖家) 账面净利润侦测</div>
+                <div class="kpi-title">入驻卖家 (TOP1卖家) 账面净利润侦测</div>
                 <div class="kpi-value" style="color: #7f8c8d;" id="out-partner-net">¥ 0</div>
-                <div class="kpi-sub">风控预警：若此数值过低，品牌方存在撤柜风险</div>
+                <div class="kpi-sub">风控预警：若此数值过低，则存在撤柜风险</div>
             </div>
         </div>
     </div>
