@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>熊猫造梦局 | 全链路量化财务沙盘 </title>
+    <title>熊猫造梦局 | 阳光百货内部测算沙盘</title>
     <style>
         :root {
-            --primary: #2c3e50;
+            --primary: #1b3b36;
             --secondary: #27ae60;
             --accent: #e67e22;
             --highlight: #e74c3c;
@@ -42,7 +42,6 @@
             margin-top: 0; margin-bottom: 20px;
         }
 
-        /* 动态定价矩阵 */
         .pricing-matrix { display: flex; gap: 15px; margin-bottom: 25px; }
         .pkg-card {
             flex: 1; border: 1px solid var(--border); border-radius: 8px;
@@ -59,7 +58,6 @@
         }
         .pkg-desc { font-size: 0.75rem; color: var(--text-sub); margin-top: 8px; line-height: 1.4; }
         
-        /* 折叠面板 (BOM配置) */
         .accordion {
             background-color: #f8f9fa; border: 1px solid var(--border);
             border-radius: 8px; margin-bottom: 25px; overflow: hidden;
@@ -75,7 +73,6 @@
         .bom-item.special { background: #fff3e0; padding: 4px 8px; border-radius: 4px; border-bottom: none; border: 1px solid #ffe0b2; }
         .bom-input { width: 55px; text-align: right; border: 1px solid #ccc; border-radius: 4px; padding: 4px; font-size: 0.85rem;}
 
-        /* 表单控件 */
         .control-group { margin-bottom: 20px; }
         .control-label {
             display: flex; justify-content: space-between;
@@ -87,12 +84,10 @@
         input[type="range"] { width: 100%; accent-color: var(--secondary); cursor: pointer; }
         input[type="range"].addon-slider { accent-color: var(--highlight); }
         
-        /* 比例滑块特殊样式 */
         .ratio-display { font-size: 0.85rem; font-weight: 700; }
         .ratio-basic { color: var(--tier1); }
         .ratio-luxury { color: var(--tier2); }
 
-        /* 结果展示卡片 */
         .kpi-box {
             background: linear-gradient(135deg, #fdfbf7 0%, #f4f7f6 100%);
             border: 1px solid var(--secondary); border-radius: 8px;
@@ -116,14 +111,14 @@
 
 <div class="container">
     <div class="header">
-        <h1>熊猫造梦局 | 全链路财务沙盘 </h1>
-        <p>散件连带利润放大器 × 波段客流压测</p>
+        <h1>阳光百货 | 熊猫造梦局 O2O招商测算沙盘</h1>
+        <p>自营重资产投入对赌 × 线上流量导入压测 × 联营分账模型</p>
     </div>
 
     <div class="grid">
         <!-- 左侧：参数输入控制台 -->
         <div class="panel">
-            <div class="panel-title">🛒 零售定价与套餐矩阵</div>
+            <div class="panel-title">🛒 品牌方零售定价与套餐矩阵</div>
             
             <div class="pricing-matrix">
                 <div class="pkg-card basic">
@@ -140,7 +135,7 @@
 
             <div class="accordion">
                 <div class="accordion-header" onclick="toggleBOM()">
-                    <span>📦 底层 BOM 进价配置 (含散件连带定义)</span>
+                    <span>📦 品牌方底层 BOM 成本侦测 (点击展开)</span>
                     <span id="bom-icon">▼</span>
                 </div>
                 <div class="accordion-content" id="bom-panel">
@@ -154,32 +149,31 @@
                         <div class="bom-item"><span>高定服饰</span><input type="number" class="bom-input" id="bom-cloth" value="28.0"></div>
                         <div class="bom-item"><span>微缩配饰</span><input type="number" class="bom-input" id="bom-acc" value="6.0"></div>
                     </div>
-                    <!-- 新增额外散件配置 -->
                     <div class="bom-grid" style="margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;">
-                        <div class="bom-item special"><span>额外散件(零售价)</span><input type="number" class="bom-input" id="price-addon" value="39.0"></div>
+                        <div class="bom-item special"><span>额外散件(零售价)</span><input type="number" class="bom-input" id="price-addon" value="20.0"></div>
                         <div class="bom-item special"><span>额外散件(BOM进价)</span><input type="number" class="bom-input" id="bom-addon" value="8.0"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="panel-title" style="margin-top:35px;">⚙️ 运营与转化动因</div>
+            <div class="panel-title" style="margin-top:35px;">⚙️ 中庭截流与导流转化动因</div>
 
             <div class="control-group">
-                <div class="control-label"><span>工作日自然客流 (22天/月)</span> <span class="val-display" id="val-traffic-wd">3000 人/天</span></div>
+                <div class="control-label"><span>工作日中庭客流 (含自然+线上导流)</span> <span class="val-display" id="val-traffic-wd">3000 人/天</span></div>
                 <input type="range" id="traffic-wd" min="500" max="10000" step="500" value="3000">
             </div>
             <div class="control-group">
-                <div class="control-label"><span>周末/节假日客流 (8天/月)</span> <span class="val-display" id="val-traffic-we">8000 人/天</span></div>
+                <div class="control-label"><span>周末/节假日客流 (含自然+线上导流)</span> <span class="val-display" id="val-traffic-we">8000 人/天</span></div>
                 <input type="range" id="traffic-we" min="1000" max="20000" step="1000" value="8000">
             </div>
             <div class="control-group">
-                <div class="control-label"><span>漏斗综合转化率 (进店+买单)</span> <span class="val-display" id="val-conversion">0.8 %</span></div>
+                <div class="control-label"><span>综合转化率 (评估品牌方销转能力)</span> <span class="val-display" id="val-conversion">0.8 %</span></div>
                 <input type="range" id="conversion" min="0.1" max="5.0" step="0.1" value="0.8">
             </div>
             
             <div class="control-group">
                 <div class="control-label">
-                    <span>主套餐选购占比分流</span> 
+                    <span>品牌方套餐选购占比分流</span> 
                     <span class="ratio-display">
                         <span class="ratio-basic">基础 <span id="val-ratio-basic">80</span>%</span> | 
                         <span class="ratio-luxury">豪华 <span id="val-ratio-luxury">20</span>%</span>
@@ -188,69 +182,72 @@
                 <input type="range" id="luxury-ratio" min="0" max="100" step="5" value="20">
             </div>
 
-            <!-- V6 新增：全客群额外散件连带率 -->
             <div class="control-group" style="background: #fff8e1; padding: 10px; border-radius: 6px; border-left: 4px solid var(--highlight);">
                 <div class="control-label">
-                    <span style="color:var(--highlight);">✨ 全客群额外散件连带率 (交叉销售)</span> 
+                    <span style="color:var(--highlight);">✨ 额外散件连带率 (探测品牌方极值利润)</span> 
                     <span class="highlight-val" id="val-addon-rate">30 %</span>
                 </div>
                 <input type="range" class="addon-slider" id="addon-rate" min="0" max="100" step="5" value="30">
-                <div style="font-size: 0.75rem; color: #7f8c8d; margin-top: 4px;">注：即付款顾客中，有多大比例会额外加购一件散件（如包包/眼镜）。此为高毛利利润泵。</div>
             </div>
 
             <hr style="border:0; border-top:1px dashed #ddd; margin: 25px 0;">
 
             <div class="control-group">
-                <div class="control-label"><span>🔥 联营阶梯降点触发线 (月流水)</span> <span class="accent-val" id="val-target">100,000 元</span></div>
-                <input type="range" id="target-gmv" min="30000" max="300000" step="10000" value="100000">
+                <div class="control-label"><span>🔥 对赌条款：商场阶梯降点触发线 (月流水)</span> <span class="accent-val" id="val-target">100,000 元</span></div>
+                <input type="range" id="target-gmv" min="50000" max="300000" step="10000" value="100000">
             </div>
             <div class="split-row" style="margin-bottom: 20px;">
                 <div style="flex:1;">
-                    <div class="control-label" style="font-size:0.8rem;">保底扣点(%) <span class="val-display" id="val-comm-base">18</span></div>
+                    <div class="control-label" style="font-size:0.8rem;">我方保底抽成(%) <span class="val-display" id="val-comm-base">18</span></div>
                     <input type="range" id="comm-base" min="10" max="30" step="1" value="18">
                 </div>
                 <div style="flex:1;">
-                    <div class="control-label" style="font-size:0.8rem;">超额阶梯扣点(%) <span class="accent-val" id="val-comm-high">12</span></div>
+                    <div class="control-label" style="font-size:0.8rem;">超额让利抽成(%) <span class="accent-val" id="val-comm-high">12</span></div>
                     <input type="range" id="comm-high" min="5" max="20" step="1" value="12">
                 </div>
             </div>
             <div class="control-group">
-                <div class="control-label"><span>💼 OpEx: 日均人力薪资及损耗杂费</span> <span class="val-display" id="val-opex">400 元/天</span></div>
+                <div class="control-label"><span>💼 品牌驻场 OpEx: 预估日均人力杂费</span> <span class="val-display" id="val-opex">400 元/天</span></div>
                 <input type="range" id="opex" min="100" max="1500" step="50" value="400">
             </div>
         </div>
 
         <!-- 右侧：数据输出看板 -->
         <div class="panel">
-            <div class="panel-title">📊 财务核心看板 (月度预估)</div>
+            <div class="panel-title">📊 阳光百货投资回报核心看板 (月度预估)</div>
 
             <div class="split-row">
                 <div class="split-col">
-                    <div class="split-title">月度总成单数</div>
+                    <div class="split-title">品牌方月度成单数</div>
                     <div class="split-val" id="out-orders">0 单</div>
                 </div>
                 <div class="split-col">
-                    <div class="split-title">单客加权 ATV (含连带)</div>
+                    <div class="split-title">商场客群综合客单价 (ATV)</div>
                     <div class="split-val" id="out-atv" style="color:var(--highlight);">¥ 0.0</div>
                 </div>
             </div>
 
             <div class="kpi-box main">
-                <div class="kpi-title">阳光百货联营总收益 (商场方)</div>
+                <div class="kpi-title">阳光百货 (我方) 联营分账收益</div>
                 <div class="kpi-value green" id="out-mall-rev">¥ 0</div>
                 <div class="kpi-sub" id="out-comm-status">正在计算...</div>
             </div>
 
-            <div class="kpi-box">
-                <div class="kpi-title">合作方净利润 (卖方盈亏生死线)</div>
-                <div class="kpi-value" id="out-partner-net">¥ 0</div>
-                <div class="kpi-sub">公式：总流水 - 综合BOM - 商场扣点 - <span style="color:#e74c3c;">人力杂费(OpEx)</span></div>
+            <!-- 核心视角翻转：商场最关心自己出资的机器多久回本 -->
+            <div class="kpi-box alert">
+                <div class="kpi-title">阳光百货资产投资回本周期 (核心对赌指标)</div>
+                <div class="kpi-value orange" id="out-roi">0 天</div>
+                <div class="kpi-sub" style="line-height: 1.5;">
+                    我方全资垫付初始设备及物料：¥14,527<br>
+                    <strong>回收路径：</strong>依据上方的【联营分账收益】纯利覆盖
+                </div>
             </div>
 
-            <div class="kpi-box alert">
-                <div class="kpi-title">MVP 测试期回本周期 (卖方视角)</div>
-                <div class="kpi-value orange" id="out-roi">0 天</div>
-                <div class="kpi-sub">基准初始沉没资产投资定额：<br>¥ 14,527 (单台设备 + 100套双层级库存)</div>
+            <!-- 放在最后作为风控参考：必须让品牌方活下去 -->
+            <div class="kpi-box" style="border-color: #bdc3c7; background: #f8f9fa;">
+                <div class="kpi-title">入驻品牌方 (TOP1卖家) 账面净利润侦测</div>
+                <div class="kpi-value" style="color: #7f8c8d;" id="out-partner-net">¥ 0</div>
+                <div class="kpi-sub">风控预警：若此数值过低，品牌方存在撤柜风险</div>
             </div>
         </div>
     </div>
@@ -273,12 +270,10 @@
     
     function updateModel() {
         try {
-            // 1. 获取零售定价
             const priceBasic = parseFloat(document.getElementById('price-basic').value) || 0;
             const priceLuxury = parseFloat(document.getElementById('price-luxury').value) || 0;
             const priceAddon = parseFloat(document.getElementById('price-addon').value) || 0;
 
-            // 2. 获取 BOM 成本
             const bSkin = parseFloat(document.getElementById('bom-skin').value) || 0;
             const bCotton = parseFloat(document.getElementById('bom-cotton').value) || 0;
             const bVoice = parseFloat(document.getElementById('bom-voice').value) || 0;
@@ -295,7 +290,6 @@
             document.getElementById('out-bom-basic').innerText = '¥' + costBasic.toFixed(1);
             document.getElementById('out-bom-luxury').innerText = '¥' + costLuxury.toFixed(1);
 
-            // 3. 更新前端文本显示
             document.getElementById('val-traffic-wd').innerText = document.getElementById('traffic-wd').value + ' 人/天';
             document.getElementById('val-traffic-we').innerText = document.getElementById('traffic-we').value + ' 人/天';
             document.getElementById('val-conversion').innerText = document.getElementById('conversion').value + ' %';
@@ -305,13 +299,11 @@
             document.getElementById('val-ratio-basic').innerText = 100 - rLuxVal;
             
             document.getElementById('val-addon-rate').innerText = document.getElementById('addon-rate').value + ' %';
-
             document.getElementById('val-target').innerText = parseInt(document.getElementById('target-gmv').value).toLocaleString() + ' 元';
             document.getElementById('val-comm-base').innerText = document.getElementById('comm-base').value;
             document.getElementById('val-comm-high').innerText = document.getElementById('comm-high').value;
             document.getElementById('val-opex').innerText = document.getElementById('opex').value + ' 元/天';
 
-            // 4. 获取计算变量
             const tWd = parseFloat(document.getElementById('traffic-wd').value) || 0;
             const tWe = parseFloat(document.getElementById('traffic-we').value) || 0;
             const conv = (parseFloat(document.getElementById('conversion').value) || 0) / 100;
@@ -324,38 +316,31 @@
             const cHigh = (parseFloat(document.getElementById('comm-high').value) || 0) / 100;
             const dailyOpex = parseFloat(document.getElementById('opex').value) || 0;
 
-            // 5. 核心计算：引入额外散件连带率
             const monthlyOrders = ((tWd * 22) + (tWe * 8)) * conv;
-            // 综合客单价 = 套餐均价 + (散件单价 × 加购概率)
             const avgATV = (priceBasic * rBas) + (priceLuxury * rLux) + (priceAddon * addonRate);
-            // 综合BOM = 套餐均价 + (散件BOM × 加购概率)
             const avgBOM = (costBasic * rBas) + (costLuxury * rLux) + (bomAddon * addonRate);
             
             const monthlyGMV = monthlyOrders * avgATV;
             const monthlyBOMTotal = monthlyOrders * avgBOM;
             const monthlyOpexTotal = dailyOpex * 30;
 
-            // 6. 阶梯扣点
             let mallRev = 0;
             let commStatus = "";
             if (monthlyGMV <= targetGMV) {
                 mallRev = monthlyGMV * cBase;
-                commStatus = `未达降点线，全额按保底 ${document.getElementById('comm-base').value}% 抽成`;
+                commStatus = `未达对赌降点线，按我方保底 ${document.getElementById('comm-base').value}% 抽成`;
             } else {
                 const basePart = targetGMV * cBase;
                 const highPart = (monthlyGMV - targetGMV) * cHigh;
                 mallRev = basePart + highPart;
-                commStatus = `🎉 突破 ${document.getElementById('target-gmv').value} 元！超额部分已按 ${document.getElementById('comm-high').value}% 让利降扣`;
+                commStatus = `🎯 卖家触发让利目标！超额溢出部分按 ${document.getElementById('comm-high').value}% 激励抽成`;
             }
 
-            // 7. 净利润计算
             const partnerNet = monthlyGMV - monthlyBOMTotal - mallRev - monthlyOpexTotal;
             
-            // 8. 投资回报率
-            const dailyNet = partnerNet / 30;
-            let roi = dailyNet > 0 ? Math.ceil(CAPEX / dailyNet) : Infinity;
+            const dailyMallRev = mallRev / 30;
+            let roi = dailyMallRev > 0 ? Math.ceil(CAPEX / dailyMallRev) : Infinity;
 
-            // 9. 渲染输出
             document.getElementById('out-orders').innerText = Math.round(monthlyOrders) + ' 单';
             document.getElementById('out-atv').innerText = '¥ ' + avgATV.toFixed(1);
             document.getElementById('out-mall-rev').innerText = fmtC(mallRev);
@@ -363,11 +348,11 @@
             
             const elPartnerNet = document.getElementById('out-partner-net');
             elPartnerNet.innerText = fmtC(partnerNet);
-            elPartnerNet.style.color = partnerNet < 0 ? '#e74c3c' : 'var(--primary)';
+            elPartnerNet.style.color = partnerNet < 0 ? '#e74c3c' : '#7f8c8d';
 
             const elRoi = document.getElementById('out-roi');
             if (roi === Infinity || roi < 0) {
-                elRoi.innerText = '持续亏损';
+                elRoi.innerText = '无法回本 (需逼迫卖家拉高引流)';
                 elRoi.style.color = '#e74c3c';
             } else {
                 elRoi.innerText = roi + ' 天';
